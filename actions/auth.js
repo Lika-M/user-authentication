@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation.js";
 
 import { createUser } from "@/lib/user.js";
+import { createAuthSession } from "@/lib/lucia-auth.js";
 
 export default async function register(prevState, formData) {
     const email = formData.get('email');
@@ -25,7 +26,10 @@ export default async function register(prevState, formData) {
     }
 
     try {
-        createUser(email, password);
+        const userId = createUser(email, password);
+
+        await createAuthSession(userId);
+        redirect('/training');
     } catch (err) {
         if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
             return {
@@ -38,5 +42,5 @@ export default async function register(prevState, formData) {
         throw err;
     }
 
-    redirect('/training');
+
 }
