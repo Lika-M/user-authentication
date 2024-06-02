@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 import register from '@/actions/auth.js';
 
-export default function AuthForm() {
+export default function AuthForm({ mode }) {
   const [formState, formAction] = useFormState(register, { errors: null });
+ 
 
   return (
     <form id="auth-form" action={formAction}>
@@ -29,12 +30,19 @@ export default function AuthForm() {
         </ul>)}
       <p>
         <button type="submit">
-          Create Account
+          {!mode || mode === 'login' ? "Login" : "Create Account"}
         </button>
       </p>
-      <p>
-        <Link href="/">Login with existing account.</Link>
-      </p>
+      {mode === 'register' && (
+        <p>
+          <Link href="/?mode=login">Login with existing account.</Link>
+        </p>
+      )}
+      {mode === 'login' && (
+        <p>
+          <Link href="/?mode=register">Create Account</Link>
+        </p>
+      )}
     </form>
   );
 }
