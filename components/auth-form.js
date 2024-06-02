@@ -8,7 +8,6 @@ import register from '@/actions/auth.js';
 export default function AuthForm({ mode }) {
   const [formState, formAction] = useFormState(register, { errors: null });
  
-
   return (
     <form id="auth-form" action={formAction}>
       <div>

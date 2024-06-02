@@ -2,8 +2,9 @@
 
 import { redirect } from "next/navigation.js";
 
-import { createUser } from "@/lib/user.js";
+import { createUser, getUserByEmail } from "@/lib/user.js";
 import { createAuthSession } from "@/lib/lucia-auth.js";
+import { verifyPassword } from "@/lib/hash.js";
 
 export default async function register(prevState, formData) {
     const email = formData.get('email');
@@ -41,6 +42,32 @@ export default async function register(prevState, formData) {
 
         throw err;
     }
+}
 
+export default async function login(prevState, formData) {
+    const email = formData.get('email');
+    const password = formData.get('password');
 
+    const existingUser = getUserByEmail(email);
+
+    if (!existingUser) {
+        return {
+            errors: {
+                email: 'Could not authenticate user, please check your credentials.'
+            }
+        };
+    }
+
+    const isValidPassword = verifyPassword(existingUser.password, password);
+
+    if (!isValidPassword) {
+        return {
+            errors: {
+                password: 'Could not authenticate user, please check your credentials.'
+            }
+        };
+    }
+
+    await createAuthSession(existingUser.id);
+    redirect('/training');
 }
