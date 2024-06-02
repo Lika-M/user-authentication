@@ -1,6 +1,15 @@
+import { redirect } from 'next/navigation.js';
+
+import { verifyAuthSession } from '@/lib/lucia-auth.js';
 import { getTrainings } from '@/lib/training';
 
 export default async function TrainingPage() {
+  const auth = await verifyAuthSession();
+
+  if (!auth.user) {
+    return redirect('/');
+  }
+
   const trainingSessions = getTrainings();
 
   return (
