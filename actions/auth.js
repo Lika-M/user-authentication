@@ -6,7 +6,7 @@ import { createUser, getUserByEmail } from "@/lib/user.js";
 import { createAuthSession } from "@/lib/lucia-auth.js";
 import { verifyPassword } from "@/lib/hash.js";
 
-export default async function register(prevState, formData) {
+export async function register(prevState, formData) {
     const email = formData.get('email');
     const password = formData.get('password');
 
@@ -44,7 +44,7 @@ export default async function register(prevState, formData) {
     }
 }
 
-export default async function login(prevState, formData) {
+export async function login(prevState, formData) {
     const email = formData.get('email');
     const password = formData.get('password');
 
@@ -71,3 +71,4 @@ export default async function login(prevState, formData) {
     await createAuthSession(existingUser.id);
     redirect('/training');
 }
+

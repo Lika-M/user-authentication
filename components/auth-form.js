@@ -3,11 +3,12 @@
 import { useFormState } from 'react-dom';
 import Link from 'next/link';
 
-import register from '@/actions/auth.js';
+import { register, login } from '@/actions/auth.js';
 
 export default function AuthForm({ mode }) {
-  const [formState, formAction] = useFormState(register, { errors: null });
- 
+  const action = mode === 'register' ? register : login;
+  const [formState, formAction] = useFormState(action, { errors: null });
+
   return (
     <form id="auth-form" action={formAction}>
       <div>
