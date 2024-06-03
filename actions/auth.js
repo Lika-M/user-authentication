@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation.js";
 
 import { createUser, getUserByEmail } from "@/lib/user.js";
-import { createAuthSession } from "@/lib/lucia-auth.js";
+import { createAuthSession, removeSession } from "@/lib/lucia-auth.js";
 import { verifyPassword } from "@/lib/hash.js";
 
 export async function register(prevState, formData) {
@@ -70,5 +70,10 @@ export async function login(prevState, formData) {
 
     await createAuthSession(existingUser.id);
     redirect('/training');
+}
+
+export async function logout() {
+    await removeSession();
+    redirect('/');
 }
 
